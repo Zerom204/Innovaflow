@@ -1,0 +1,15 @@
+# Python Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Project Data & Logs (Keep business data local!)
+*.xlsx
+*.csv
+Raw_Data/
+Clean_Output/
+Test_Sandbox/
+docket_processing_log.csv
+build/

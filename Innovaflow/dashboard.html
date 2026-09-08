@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InnovaFlow — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .brand-section:hover { opacity: 0.8; }
+  </style>
+</head>
+<body>
+
+  <div id="workspace-container" style="display: block;">
+    <div class="app-frame">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="brand-section" onclick="enterLandingPage()" style="cursor: pointer;">
+            <span class="brand-title">InnovaFlow</span>
+          </div>
+          <div class="system-status">
+            <span class="status-indicator"></span>
+            <span class="mono">System Active</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-item active" onclick="switchTab('dashboard', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="9"/>
+              <rect x="14" y="3" width="7" height="5"/>
+              <rect x="14" y="12" width="7" height="9"/>
+              <rect x="3" y="16" width="7" height="5"/>
+            </svg>
+            <span>Dashboard</span>
+          </div>
+
+          <div class="nav-item" id="nav-finder" onclick="switchTab('finder', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Year Explorer</span>
+          </div>
+
+          <div class="nav-item" onclick="switchTab('logs', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 14 15 20 9"/>
+              <polyline points="14 9 20 9 20 15"/>
+            </svg>
+            <span>Logs</span>
+          </div>
+
+          <div class="nav-item" onclick="switchTab('reports', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span>Reports</span>
+          </div>
+
+          <div class="nav-item" onclick="switchTab('analytics', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span>Analytics</span>
+          </div>
+
+          <div class="nav-item" onclick="switchTab('settings', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Settings</span>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <a href="#" class="footer-link" onclick="triggerToast('Documentation panel offline. Connect to admin host.')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>Help</span>
+          </a>
+          <a href="#" class="footer-link" onclick="triggerToast('Support terminal active. Ticket ID generated.')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Support</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- MAIN WRAPPER -->
+      <main class="main-wrapper">
+        <!-- TOP HEADER -->
+        <header class="top-header">
+          <div class="header-left">
+            <span class="breadcrumbs" id="breadcrumb-title">Organization Workspace</span>
+          </div>
+
+          <div class="header-right">
+            <div class="header-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Quick find... (Cmd+K)" id="quick-find-input" readonly onclick="openGlobalSearch()" style="cursor: pointer;">
+            </div>
+
+            <button class="icon-btn" onclick="triggerToast('0 Unresolved Notifications')" title="Notifications">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </button>
+
+            <button class="icon-btn" onclick="toggleDarkMode()" title="Toggle Dark/Light Mode">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              </svg>
+            </button>
+
+            <div class="user-profile">
+              <div class="user-avatar">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="var(--surface-dim)">
+                  <circle cx="14" cy="10" r="6" fill="var(--text-secondary)" />
+                  <path d="M4 24c0-5 4-8 10-8s10 3 10 8" fill="var(--text-secondary)" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- CONTENT BODY -->
+        <div class="content-body">
+          <!-- ================= TAB 1: DASHBOARD ================= -->
+          <div id="tab-dashboard" class="view-panel active">
+            <div class="bento-grid dashboard-layout">
+              <!-- Left pane: Configuration -->
+              <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                  <h3 class="card-title" style="margin-bottom: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Configure Organizer
+                  </h3>
+                  <button class="btn-console" onclick="openAddYearModal()" style="font-size: 10px; padding: 4px 8px;">+ Add Financial Year</button>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Master Excel File Path</label>
+                  <div class="input-with-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <input type="text" class="mono" id="input-master-excel" value="/Volumes/Data/Master_Index.xlsx">
+                    <button class="path-browse-btn" onclick="browseLocalPath('input-master-excel')" title="Browse Master Excel File">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Source Directories (Raw Data)</label>
+                  <div class="input-with-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <input type="text" class="mono" id="input-source-dirs" value="/Volumes/Data/Raw_Inputs, /Volumes/Data/Scans">
+                    <button class="path-browse-btn" onclick="browseLocalPath('input-source-dirs')" title="Browse Source Directory">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <small class="form-help">Separate multiple paths with commas.</small>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Destination Root Path (Clean Output)</label>
+                  <div class="input-with-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                      <line x1="7" y1="7" x2="7.01" y2="7"/>
+                    </svg>
+                    <input type="text" class="mono" id="input-dest-path" value="/Volumes/Data/Organized_Output">
+                    <button class="path-browse-btn" onclick="browseLocalPath('input-dest-path')" title="Browse Destination Directory">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Target Financial Year</label>
+                  <div class="year-tag-container" id="dashboard-year-tags">
+                    <!-- Dynamic dashboard tags -->
+                  </div>
+                </div>
+
+                <button class="btn-run" onclick="runOrganizer()" style="margin-top: 20px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
+                  <span>Run Organizer</span>
+                </button>
+              </div>
+
+              <!-- Right pane: Inactive Widget & Capacity -->
+              <div class="right-dashboard-pane">
+                <div class="widget-empty-run">
+                  <div class="widget-empty-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="9" y1="9" x2="15" y2="15"/>
+                      <line x1="15" y1="9" x2="9" y2="15"/>
+                    </svg>
+                  </div>
+                  <h4>No Active Run</h4>
+                  <p>Configure your paths in the panel and click Run Organizer to begin processing documents.</p>
+                </div>
+
+                <div class="card capacity-widget">
+                  <div class="capacity-header" id="capacity-header">System Capacity</div>
+                  <div class="capacity-value mono" id="capacity-value">-- GB</div>
+                  <div class="capacity-sub" id="capacity-sub">Available Space</div>
+                  <div class="capacity-progress-bg">
+                    <div class="capacity-progress-fill" id="capacity-progress-fill" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= DIALOG 3: ADD FINANCIAL YEAR ================= -->
+  <div class="dialog-overlay" id="add-year-dialog-overlay" onclick="closeAddYearModal()">
+    <div class="dialog-card" onclick="event.stopPropagation()">
+      <div class="dialog-title">Enter Financial Year</div>
+      <div class="dialog-body">
+        <p style="color: var(--text-secondary); margin-bottom: 15px;">
+          Add a new financial year partition path for document ingestion (format: YYYY-YY).
+        </p>
+        <div class="form-group">
+          <label class="form-label">Financial Year (e.g. 2024-25)</label>
+          <input type="text" class="mono" id="input-add-year" placeholder="2024-25" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-med); border-radius: var(--panel-radius); background: var(--bg-surface); color: var(--text-main); outline: none;">
+          <small class="form-help" id="add-year-error" style="color: var(--status-red-text); display: none; margin-top: 4px;"></small>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn-secondary" style="padding: 8px 16px;" onclick="closeAddYearModal()">Cancel</button>
+        <button class="btn-primary" style="padding: 8px 16px;" onclick="submitAddYear()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DIALOG 4: GLOBAL SEARCH PALETTE ================= -->
+  <div class="dialog-overlay" id="global-search-overlay" onclick="closeGlobalSearch()" style="align-items: flex-start; padding-top: 80px;">
+    <div class="dialog-card" onclick="event.stopPropagation()" style="width: 600px; max-width: 90%;">
+      <div style="display: flex; align-items: center; border-bottom: 1px solid var(--border-med); padding: 12px 16px; gap: 10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-muted);">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="global-search-input" placeholder="Search years, dockets, parties, folders, files... (Esc to close)" style="border: none; background: transparent; color: var(--text-main); font-size: 14px; outline: none; width: 100%;" onkeyup="handleGlobalSearch(event)">
+      </div>
+      <div class="dialog-body" id="global-search-results" style="max-height: 350px; overflow-y: auto; padding: 10px 0;">
+        <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">
+          Type query to search InnovaFlow database...
+        </div>
+      </div>
+      <div style="border-top: 1px solid var(--border-light); padding: 8px 16px; display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+        <span>Search: Years, Dockets, Parties, Folders, Files</span>
+        <span>Esc to close • Enter to select</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION ================= -->
+  <div class="toast-notification" id="toast-notify">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="16" x2="12" y2="12"/>
+      <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+    <span id="toast-message">Message</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

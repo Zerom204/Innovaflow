@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InnovaFlow — Reports</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .brand-section:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="workspace-container" style="display: block;">
+    <div class="app-frame">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="brand-section" onclick="enterLandingPage()" style="cursor: pointer;">
+            <span class="brand-title">InnovaFlow</span>
+          </div>
+          <div class="system-status">
+            <span class="status-indicator"></span>
+            <span class="mono">System Active</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-item" onclick="switchTab('dashboard', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="9" />
+              <rect x="14" y="3" width="7" height="5" />
+              <rect x="14" y="12" width="7" height="9" />
+              <rect x="3" y="16" width="7" height="5" />
+            </svg>
+            <span>Dashboard</span>
+          </div>
+
+          <div class="nav-item" id="nav-finder" onclick="switchTab('finder', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>Year Explorer</span>
+          </div>
+
+          <div class="nav-item" onclick="switchTab('logs', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 14 15 20 9" />
+              <polyline points="14 9 20 9 20 15" />
+            </svg>
+            <span>Logs</span>
+          </div>
+
+          <div class="nav-item active" onclick="switchTab('reports', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            <span>Reports</span>
+          </div>
+
+          <div class="nav-item" onclick="switchTab('analytics', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+            </svg>
+            <span>Analytics</span>
+          </div>
+
+          <div class="nav-item" onclick="switchTab('settings', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            <span>Settings</span>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <a href="#" class="footer-link" onclick="triggerToast('Documentation panel offline. Connect to admin host.')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>Help</span>
+          </a>
+          <a href="#" class="footer-link" onclick="triggerToast('Support terminal active. Ticket ID generated.')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            <span>Support</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- MAIN WRAPPER -->
+      <main class="main-wrapper">
+        <!-- TOP HEADER -->
+        <header class="top-header">
+          <div class="header-left">
+            <span class="breadcrumbs" id="breadcrumb-title">Reports & Data Tables</span>
+          </div>
+
+          <div class="header-right">
+            <div class="header-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="text" placeholder="Quick find... (Cmd+K)" id="quick-find-input" readonly
+                onclick="openGlobalSearch()" style="cursor: pointer;">
+            </div>
+
+            <button class="icon-btn" onclick="triggerToast('0 Unresolved Notifications')" title="Notifications">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+            </button>
+
+            <button class="icon-btn" onclick="toggleDarkMode()" title="Toggle Dark/Light Mode">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5" />
+                <path
+                  d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+              </svg>
+            </button>
+
+            <div class="user-profile">
+              <div class="user-avatar">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="var(--surface-dim)">
+                  <circle cx="14" cy="10" r="6" fill="var(--text-secondary)" />
+                  <path d="M4 24c0-5 4-8 10-8s10 3 10 8" fill="var(--text-secondary)" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- CONTENT BODY -->
+        <div class="content-body">
+          <!-- ================= TAB 4: REPORTS ================= -->
+          <div id="tab-reports" class="view-panel active">
+            <!-- Empty state if no run has completed -->
+            <div id="reports-empty-state" class="empty-state-card"
+              style="text-align: center; padding: 60px; border: 1px dashed var(--border-med); border-radius: var(--panel-radius); color: var(--text-muted); background: var(--bg-surface);">
+              <div style="font-size: 32px; margin-bottom: 12px;">📊</div>
+              <h3>No Ingest Reports Generated</h3>
+              <p style="font-size: 12px; margin-top: 6px; color: var(--text-muted);">Please configure and run the
+                document organizer simulation in the Dashboard to compile analysis reports.</p>
+            </div>
+
+            <!-- Reports Tab Content -->
+            <div id="reports-content" style="display: none; position: relative;">
+
+              <div style="display: flex; flex-direction: column; gap: 20px; width: 100%; min-width: 0; max-width: 100%;">
+
+                <!-- REPORTS STORAGE PATH & HISTORICAL SELECTOR BAR -->
+                <div class="card" style="padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface); border: 1px solid var(--border-med); border-radius: var(--panel-radius); flex-wrap: wrap; gap: 12px;">
+                  <div style="display: flex; align-items: center; gap: 10px; min-width: 300px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-yellow); flex-shrink: 0;">
+                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span style="font-weight: 600; font-size: 13px; color: var(--text-main);">Reports Storage Path:</span>
+                    <span class="mono wrap-column" id="reports-path-display" style="font-size: 12px; color: var(--accent-yellow, #eab308); background: rgba(234, 179, 8, 0.1); padding: 3px 8px; border-radius: 4px;">C:\Users\sneha\Desktop\Test_Sandbox\Reports</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Access Saved Report:</label>
+                    <select id="reports-history-select" onchange="selectHistoricalReport(this.value)" style="padding: 5px 12px; font-size: 12px; border-radius: 4px; background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-med); cursor: pointer; min-width: 180px;">
+                      <!-- Populated dynamically -->
+                    </select>
+                    <button class="btn-secondary" onclick="promptChangeReportsPath()" style="padding: 5px 12px; font-size: 11px;">Change Storage Path</button>
+                  </div>
+                </div>
+
+                <!-- FULL-WIDTH REPORT DETAILS -->
+                <div id="reports-detail-panel" style="display: flex; flex-direction: column; gap: 20px; width: 100%; min-width: 0; max-width: 100%;">
+                  <!-- Report Metadata Overview -->
+                  <div class="card" style="padding: 15px;">
+                    <div
+                      style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; margin-bottom: 12px;">
+                      <div style="display: flex; align-items: center; gap: 12px;">
+                        <!-- Static Report Icon -->
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2" style="color: var(--accent-yellow); flex-shrink: 0;">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                          <line x1="16" y1="13" x2="8" y2="13" />
+                          <line x1="16" y1="17" x2="8" y2="17" />
+                          <polyline points="10 9 9 9 8 9" />
+                        </svg>
+                        <div>
+                          <h3 id="report-detail-title" style="margin: 0; font-size: 15px; font-weight: 700;">Run #1
+                            Overview</h3>
+                          <span id="report-detail-time" class="mono"
+                            style="font-size: 11px; color: var(--text-muted);">Timestamp: --</span>
+                        </div>
+                      </div>
+                      <div>
+                        <span class="system-badge" id="report-detail-year" style="font-size: 11px; padding: 3px 8px;">FY
+                          --</span>
+                      </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                      <div style="border-right: 1px solid var(--border-light); padding-right: 10px;">
+                        <div
+                          style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">
+                          Total Folders Ingested</div>
+                        <div id="report-meta-folders"
+                          style="font-size: 20px; font-weight: 700; color: var(--text-main); margin-top: 4px;">-</div>
+                      </div>
+                      <div style="border-right: 1px solid var(--border-light); padding-right: 10px;">
+                        <div
+                          style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">
+                          Successful Matches</div>
+                        <div id="report-meta-success"
+                          style="font-size: 20px; font-weight: 700; color: var(--status-green-text); margin-top: 4px;">-
+                        </div>
+                      </div>
+                      <div>
+                        <div
+                          style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">
+                          Manual Reviews Flagged</div>
+                        <div id="report-meta-reviews"
+                          style="font-size: 20px; font-weight: 700; color: var(--status-orange-text); margin-top: 4px;">
+                          -</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Data Review Table -->
+                  <div class="card table-card">
+                    <div class="table-header-block">
+                      <h4 style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin: 0;">
+                        <span style="display: flex; align-items: center; gap: 6px;">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6" />
+                            <line x1="8" y1="12" x2="21" y2="12" />
+                            <line x1="8" y1="18" x2="21" y2="18" />
+                            <line x1="3" y1="6" x2="3.01" y2="6" />
+                            <line x1="3" y1="12" x2="3.01" y2="12" />
+                            <line x1="3" y1="18" x2="3.01" y2="18" />
+                          </svg>
+                          Ambiguous Matches Pending Authorization
+                        </span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <button class="btn-secondary" id="select-all-pending-btn" onclick="toggleSelectAllPending()" style="padding: 4px 10px; font-size: 11px;">Select All</button>
+                          <button class="btn-primary" id="export-selected-btn" onclick="exportSelectedTransactions()" style="padding: 4px 10px; font-size: 11px; background: linear-gradient(135deg, #10b981, #059669); border-color: #047857; color: #ffffff;">Export Selected Transactions (0)</button>
+                        </div>
+                      </h4>
+                    </div>
+                    <div class="table-wrapper">
+                      <table class="grid-table">
+                        <thead>
+                          <tr>
+                            <th style="width: 5%; text-align: center;">
+                              <input type="checkbox" id="header-select-all-checkbox" onchange="toggleSelectAllPending(this.checked)" style="cursor: pointer; accent-color: var(--accent-yellow, #eab308);">
+                            </th>
+                            <th style="width: 32%;">Filename</th>
+                            <th style="width: 25%;">Excel Real Name</th>
+                            <th style="width: 12%; text-align: center;">Match Score</th>
+                            <th style="width: 16%;">Target Location</th>
+                            <th style="width: 10%; text-align: center;">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="pending-reviews-tbody">
+                          <!-- Filled dynamically -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- General Data Table -->
+                  <div class="card table-card">
+                    <div class="table-header-block">
+                      <h4 style="display: flex; align-items: center; gap: 6px; margin: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                        All Processed Transactions
+                      </h4>
+                    </div>
+                    <div class="table-wrapper">
+                      <table class="grid-table">
+                        <thead>
+                          <tr>
+                            <th style="width: 10%;">Docket ID</th>
+                            <th style="width: 12%;">Category</th>
+                            <th style="width: 20%;">Excel Real Name</th>
+                            <th style="width: 35%;">Scanned Path</th>
+                            <th style="width: 13%; text-align: center;">Match Score</th>
+                            <th style="width: 10%; text-align: center;">Result</th>
+                          </tr>
+                        </thead>
+                        <tbody id="processed-transactions-tbody">
+                          <!-- Filled dynamically -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ================= DIALOG 4: GLOBAL SEARCH PALETTE ================= -->
+        <div class="dialog-overlay" id="global-search-overlay" onclick="closeGlobalSearch()"
+          style="align-items: flex-start; padding-top: 80px;">
+          <div class="dialog-card" onclick="event.stopPropagation()" style="width: 600px; max-width: 90%;">
+            <div
+              style="display: flex; align-items: center; border-bottom: 1px solid var(--border-med); padding: 12px 16px; gap: 10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="color: var(--text-muted);">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="text" id="global-search-input"
+                placeholder="Search years, dockets, parties, folders, files... (Esc to close)"
+                style="border: none; background: transparent; color: var(--text-main); font-size: 14px; outline: none; width: 100%;"
+                onkeyup="handleGlobalSearch(event)">
+            </div>
+            <div class="dialog-body" id="global-search-results"
+              style="max-height: 350px; overflow-y: auto; padding: 10px 0;">
+              <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">
+                Type query to search InnovaFlow database...
+              </div>
+            </div>
+            <div
+              style="border-top: 1px solid var(--border-light); padding: 8px 16px; display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+              <span>Search: Years, Dockets, Parties, Folders, Files</span>
+              <span>Esc to close • Enter to select</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TOAST NOTIFICATION ================= -->
+        <div class="toast-notification" id="toast-notify">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          <span id="toast-message">Message</span>
+        </div>
+
+        <script src="app.js"></script>
+</body>
+
+</html>
