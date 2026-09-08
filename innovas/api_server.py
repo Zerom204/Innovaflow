@@ -25,6 +25,39 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def normalize_network_path(path_str: str) -> Path:
+    """
+    Normalizes local paths and Windows UNC/LAN network paths reliably.
+    Ensures network shares do not lose their leading double slashes or get treated as local drives.
+    """
+    if not path_str:
+        return Path()
+        
+    path_str = str(path_str).strip()
+    
+    # Clean up file URI schemas safely
+    if path_str.startswith("file:///"):
+        path_str = path_str[8:]
+        # If it was a UNC path formatted as file:////192.168.1.1/... it is now /192.168.1.1/...
+        # Restore UNC double slashes
+        if path_str.startswith("/") and not path_str.startswith("//"):
+            path_str = "/" + path_str
+    elif path_str.startswith("file://"):
+        path_str = "//" + path_str[7:]
+        
+    # Convert forward slashes to backslashes for reliable Windows processing
+    path_str = path_str.replace("/", "\\")
+    
+    # Fix potential truncation: if path starts with \ but not \\, and doesn't look like a local root like \Users
+    # Force to \\ to ensure network shares remain properly formatted as UNC paths.
+    if path_str.startswith("\\") and not path_str.startswith("\\\\"):
+        parts = path_str.split("\\")
+        if len(parts) > 1 and ("." in parts[1] or parts[1].lower() not in ["users", "windows", "program files"]):
+            path_str = "\\" + path_str
+
+    return Path(path_str)
+
+
 # ============================================================================
 # API DATA MODELS
 # ============================================================================
@@ -374,9 +407,9 @@ def process_docket_folder(source_folder: Path, dest_docket_dir: Path):
 @app.post("/api/run-organizer")
 async def run_organizer(request: OrganizerRequest):
     try:
-        excel_path = Path(request.excel_path)
-        source_dir = Path(request.source_dir)
-        dest_dir = Path(request.dest_dir)
+        excel_path = normalize_network_path(request.excel_path)
+        source_dir = normalize_network_path(request.source_dir)
+        dest_dir = normalize_network_path(request.dest_dir)
 
         if not excel_path.exists():
             raise HTTPException(status_code=400, detail="Excel file not found at the provided path.")
@@ -463,9 +496,9 @@ async def run_organizer_ws(websocket: WebSocket):
     try:
         # Receive configuration
         config = await websocket.receive_json()
-        excel_path = Path(config["excel_path"])
-        source_dir = Path(config["source_dir"])
-        dest_dir = Path(config["dest_dir"])
+        excel_path = normalize_network_path(config["excel_path"])
+        source_dir = normalize_network_path(config["source_dir"])
+        dest_dir = normalize_network_path(config["dest_dir"])
         sheets = config["sheets"]
         threshold = config.get("threshold", 50)
 
@@ -613,9 +646,9 @@ async def run_organizer_ws(websocket: WebSocket):
 @app.post("/api/approve-route")
 async def approve_route(request: ApproveRouteRequest):
     try:
-        excel_path = Path(request.excel_path)
-        source_dir = Path(request.source_dir)
-        dest_dir = Path(request.dest_dir)
+        excel_path = normalize_network_path(request.excel_path)
+        source_dir = normalize_network_path(request.source_dir)
+        dest_dir = normalize_network_path(request.dest_dir)
         year = request.year
 
         if not excel_path.exists():
@@ -695,7 +728,7 @@ async def get_dockets(year: str, dest_dir: str = None):
     dir_path = None
 
     if dest_dir:
-        dest_path = Path(dest_dir)
+        dest_path = normalize_network_path(dest_dir)
         if dest_path.exists():
             cand1 = dest_path / year
             if cand1.exists() and cand1.is_dir():
@@ -716,7 +749,7 @@ async def get_dockets(year: str, dest_dir: str = None):
         except ImportError:
             YEAR_PATHS = {}
         if year in YEAR_PATHS:
-            dir_path = Path(YEAR_PATHS[year])
+            dir_path = normalize_network_path(YEAR_PATHS[year])
 
     if not dir_path or not dir_path.exists():
         return []
@@ -853,7 +886,7 @@ def get_all_years_internal(dest_dir: str = None) -> list:
         pass
         
     if dest_dir:
-        dest_path = Path(dest_dir)
+        dest_path = normalize_network_path(dest_dir)
         if dest_path.exists():
             for child in dest_path.iterdir():
                 if child.is_dir():
@@ -881,7 +914,7 @@ async def add_financial_year(req: AddYearRequest):
         save_custom_years(custom_years)
     
     if req.dest_dir:
-        dest_path = Path(req.dest_dir)
+        dest_path = normalize_network_path(req.dest_dir)
         if dest_path.exists():
             (dest_path / year).mkdir(parents=True, exist_ok=True)
             
@@ -908,7 +941,7 @@ def compute_analytics(dest_dir: str = None):
 
     effective_paths = {}
     if dest_dir:
-        dest_path = Path(dest_dir)
+        dest_path = normalize_network_path(dest_dir)
         if dest_path.exists():
             for child in dest_path.iterdir():
                 if child.is_dir():
@@ -927,7 +960,7 @@ def compute_analytics(dest_dir: str = None):
             stats["storage"][yr] = 0.0
 
     for yr, path_str in effective_paths.items():
-        p = Path(path_str)
+        p = normalize_network_path(path_str)
         if not p.exists():
             continue
         
@@ -1051,10 +1084,7 @@ async def startup_event():
 
 @app.post("/api/open-folder")
 async def open_folder(request: OpenFolderRequest):
-    path_str = request.path
-    if path_str.startswith("file:///"):
-        path_str = path_str[8:]
-    p = Path(path_str)
+    p = normalize_network_path(request.path)
     if not p.exists():
         raise HTTPException(status_code=404, detail=f"Path does not exist: {p}")
     try:
@@ -1066,10 +1096,7 @@ async def open_folder(request: OpenFolderRequest):
 
 @app.post("/api/open-parent")
 async def open_parent(request: OpenFolderRequest):
-    path_str = request.path
-    if path_str.startswith("file:///"):
-        path_str = path_str[8:]
-    p = Path(path_str)
+    p = normalize_network_path(request.path)
     parent = p.parent
     if not parent.exists():
         raise HTTPException(status_code=404, detail=f"Parent path does not exist: {parent}")
@@ -1126,12 +1153,17 @@ def get_system_capacity(path: str = Query(None)):
     """Calculates total, free, and used drive capacity for any drive (local or external) matching destination clean output path."""
     if not path or not path.strip():
         try:
-            path = get_default_clean_output_path()
+            from innovas.year_paths import YEAR_PATHS
+            if YEAR_PATHS:
+                # Dynamically get the parent directory of the first year partition
+                path = str(Path(list(YEAR_PATHS.values())[0]).parent)
+            else:
+                path = r"C:\Users\sneha\Desktop\Test_Sandbox\Clean_Output"
         except Exception:
             path = r"C:\Users\sneha\Desktop\Test_Sandbox\Clean_Output"
 
     try:
-        target_path = Path(path).resolve()
+        target_path = normalize_network_path(path).resolve()
         check_path = target_path
         while not check_path.exists() and check_path.parent != check_path:
             check_path = check_path.parent
@@ -1190,10 +1222,10 @@ class SaveReportsRequest(BaseModel):
 
 @app.get("/api/reports")
 async def load_reports(reports_dir: str = None):
-    if not reports_dir:
-        reports_dir = r"C:\Users\sneha\Desktop\Test_Sandbox\Reports"
+    if not reports_dir or ("sneha" in reports_dir.lower() and "reports" in reports_dir.lower()):
+        reports_dir = r"C:\Users\INNOVUS\Desktop\TEST\reports"
     
-    target_dir = Path(reports_dir)
+    target_dir = normalize_network_path(reports_dir)
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
     except Exception:
@@ -1218,10 +1250,10 @@ async def load_reports(reports_dir: str = None):
 @app.post("/api/reports/save")
 async def save_reports(req: SaveReportsRequest):
     reports_dir = req.reports_dir.strip()
-    if not reports_dir:
-        reports_dir = r"C:\Users\sneha\Desktop\Test_Sandbox\Reports"
+    if not reports_dir or ("sneha" in reports_dir.lower() and "reports" in reports_dir.lower()):
+        reports_dir = r"C:\Users\INNOVUS\Desktop\TEST\reports"
         
-    target_dir = Path(reports_dir)
+    target_dir = normalize_network_path(reports_dir)
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
     except Exception as e:
@@ -1276,4 +1308,4 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     threading.Thread(target=open_browser, daemon=True).start()
     uvicorn.run(app, host="127.0.0.1", port=8001)
-
+

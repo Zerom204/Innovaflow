@@ -7,7 +7,7 @@ import multiprocessing
 from pathlib import Path
 from PIL import Image
 import uvicorn
-from innovas.api_server import app
+from innovas.api_server import app, normalize_network_path
 
 def print_pixelated_logo_and_welcome():
     if sys.platform == "win32":
@@ -19,8 +19,8 @@ def print_pixelated_logo_and_welcome():
 
     logo_path = None
     if getattr(sys, 'frozen', False):
-        meipass_dir = Path(sys._MEIPASS)
-        exe_dir = Path(sys.executable).parent
+        meipass_dir = normalize_network_path(sys._MEIPASS)
+        exe_dir = normalize_network_path(sys.executable).parent
         candidates = [
             meipass_dir / "Innovaflow" / "LOGO.jpg",
             meipass_dir / "LOGO.jpg",
@@ -33,8 +33,8 @@ def print_pixelated_logo_and_welcome():
                 break
     else:
         candidates = [
-            Path(__file__).parent / "Innovaflow" / "LOGO.jpg",
-            Path(__file__).parent / "LOGO.jpg"
+            normalize_network_path(__file__).parent / "Innovaflow" / "LOGO.jpg",
+            normalize_network_path(__file__).parent / "LOGO.jpg"
         ]
         for c in candidates:
             if c.exists():
@@ -82,8 +82,8 @@ def print_pixelated_logo_and_welcome():
 def open_browser():
     time.sleep(1.5)
     if getattr(sys, 'frozen', False):
-        exe_dir = Path(sys.executable).parent
-        meipass_dir = Path(sys._MEIPASS)
+        exe_dir = normalize_network_path(sys.executable).parent
+        meipass_dir = normalize_network_path(sys._MEIPASS)
         if (exe_dir / "index.html").exists():
             target_path = (exe_dir / "index.html").resolve()
         elif (meipass_dir / "index.html").exists():
@@ -91,7 +91,7 @@ def open_browser():
         else:
             target_path = (exe_dir / "index.html").resolve()
     else:
-        target_path = (Path(__file__).parent / "index.html").resolve()
+        target_path = (normalize_network_path(__file__).parent / "index.html").resolve()
 
     webbrowser.open(target_path.as_uri())
 

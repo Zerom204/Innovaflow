@@ -144,6 +144,7 @@ let appState = {
   dashboardExcel: "C:\\Users\\sneha\\Desktop\\Test_Sandbox\\excel.xlsx",
   dashboardSource: "C:\\Users\\sneha\\Desktop\\Test_Sandbox\\Raw_Data",
   dashboardDest: "C:\\Users\\sneha\\Desktop\\Test_Sandbox\\Clean_Output",
+  dashboardReportsDir: "C:\\Users\\INNOVUS\\Desktop\\TEST\\reports",
   processedTransactions: [],
 };
 
@@ -172,6 +173,9 @@ if (savedStateRaw) {
     appState.logInterval = null;
     if (saved.hasOwnProperty("darkModeActive")) {
       hasSavedTheme = true;
+    }
+    if (!appState.dashboardReportsDir || appState.dashboardReportsDir.includes("sneha")) {
+      appState.dashboardReportsDir = "C:\\Users\\INNOVUS\\Desktop\\TEST\\reports";
     }
   } catch (e) {
     console.error("Failed to restore state", e);
@@ -221,15 +225,10 @@ function saveState() {
 }
 
 function getReportsDirectory() {
-  if (appState.dashboardReportsDir) return appState.dashboardReportsDir;
-  if (appState.dashboardDest) {
-    let dest = appState.dashboardDest;
-    if (dest.endsWith("\\Clean_Output") || dest.endsWith("/Clean_Output")) {
-      return dest.replace(/[\\/]Clean_Output[\\/]?$/, "\\Reports");
-    }
-    return dest + "\\Reports";
+  if (appState.dashboardReportsDir && !appState.dashboardReportsDir.includes("sneha")) {
+    return appState.dashboardReportsDir;
   }
-  return "C:\\Users\\sneha\\Desktop\\Test_Sandbox\\Reports";
+  return "C:\\Users\\INNOVUS\\Desktop\\TEST\\reports";
 }
 
 function updateReportsPathUI() {
